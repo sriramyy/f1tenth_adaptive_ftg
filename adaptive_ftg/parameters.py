@@ -14,11 +14,12 @@ class Parameters:
         self.MAX_LIDAR_DIST = 6.0      #
         self.CURRENT_SPEED = 4.0       #
         self.MAX_STEER_ABS = 0.7       # Angle Limit
-        self.STEER_SMOOTH_ALPHA = 0.5  # 0.1 = Slow/Smooth, 1.0 = Instant
+        self.STEER_SMOOTH_ALPHA = 0.5  # 
         self.PREPROCESS_CONV_SIZE = 3  # determines the "sharpness" of vision 
 
         # State
         self.state = "CORNER"
+        self.change_num = 0
 
 
     def __updateParameters(self, input:list):
@@ -47,23 +48,24 @@ class Parameters:
 
         if self.state != inputState:
             self.state = inputState
+            self.change_num += 1
             changed = True
 
         # Format: [Bubble, Lookahead, Speed, SteerAbs, Alpha, Conv]
         if inputState == "STRAIGHT":
-            if changed: print(f"[STATE CHANGE] ➡️ STRAIGHT")
+            if changed: print(f"[STATE CHANGE {self.change_num}] ➡️ STRAIGHT")
             # when straight reduce bubble, increase lookahead and speed
             # don't let car turn too hard, make steering more smooth, reduce the sharpness of vision
-            params = [40, 10.0, 8.0, 0.15, 0.1, 5]
+            params = [40, 10.0, 8.0, 0.1, 0.0, 5]
             self.__updateParameters(params)
 
         elif inputState == "CORNER":
-            if changed: print(f"[STATE CHANGE] ⤴️ CORNER")
+            if changed: print(f"[STATE CHANGE {self.change_num}] ⤴️ CORNER")
             # when corner
             params = [70, 6.0, 4.5, 0.5, 0.5, 3]
             self.__updateParameters(params)
 
         elif inputState == "HAIRPIN":
-            if changed: print(f"[STATE CHANGE] ↩️ HAIRPIN")
-            params = [120, 3.0, 1.5, 0.8, 1.0, 1]
+            if changed: print(f"[STATE CHANGE {self.change_num}] ↩️ HAIRPIN")
+            params = [50, 2.5, 2.5, 1.0, 0.85, 1]   
             self.__updateParameters(params)

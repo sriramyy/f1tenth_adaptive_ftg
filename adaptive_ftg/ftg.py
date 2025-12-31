@@ -74,6 +74,10 @@ class AdaptiveFollowGap(Node):
 
 
     def preprocess_lidar(self, ranges):
+        # sanitize invalid readings so zeros/inf do not create false obstacles that wobble the bubble
+        ranges = np.nan_to_num(ranges, nan=self.params.MAX_LIDAR_DIST, posinf=self.params.MAX_LIDAR_DIST, neginf=0.0)
+        ranges[ranges <= 0.0] = self.params.MAX_LIDAR_DIST
+
         n = len(ranges)
         self.radians_per_elem = (2.0 * np.pi) / n
         

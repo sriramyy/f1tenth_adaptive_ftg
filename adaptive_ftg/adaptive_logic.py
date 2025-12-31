@@ -5,9 +5,9 @@ class Logic:
         # TUNING THRESHOLDS
         # determines WHEN the car changes states
 
-        # average dist > 8 means on straight
+        # average dist > xx means on straight
         self.THRESH_STRAIGHT = 8.0 
-        # average dist < 3.5 means hairpin/slow section
+        # average dist < xx means hairpin/slow section
         self.THRESH_HAIRPIN = 3.5
 
 

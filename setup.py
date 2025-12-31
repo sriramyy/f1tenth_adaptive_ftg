@@ -23,7 +23,7 @@ setup(
     entry_points={
         'console_scripts': [
             'ftg = adaptive_ftg.ftg:main',
-            'supervisor = adaptive_ftg.supervisor.py'
+            'supervisor = adaptive_ftg.supervisor:main',
         ],
     },
 )
