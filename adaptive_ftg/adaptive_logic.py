@@ -2,24 +2,20 @@ import numpy as np
 
 class Logic:
     def __init__(self):
-        # TUNING THRESHOLDS
-        # determines WHEN the car changes states
-
-        # average dist > xx means on straight
-        self.THRESH_STRAIGHT = 8.0 
-        # average dist < xx means hairpin/slow section
-        self.THRESH_HAIRPIN = 3.5
-
+        # --- REAL WORLD / SMALL TRACK THRESHOLDS ---
+        
+        # Reduced from 8.0 -> 3.0
+        # On a small track, if you see 3m of space, that IS a straight.
+        self.THRESH_STRAIGHT = 3.0 
+        
+        # Reduced from 3.5 -> 1.5
+        # Only panic if the wall is literally right in front of us.
+        self.THRESH_HAIRPIN = 1.5
 
     def getFrontDist(self, ranges) -> float:
-        """Calculates the average distance from front"""
         mid_idx = len(ranges) // 2
         window_size = 40 
-
-        # slice the center array
         center_chunk = ranges[mid_idx - window_size : mid_idx + window_size]
-
-        # filter out invalid (0, inf) points
         valid_points = center_chunk[np.isfinite(center_chunk)]
 
         if len(valid_points) == 0:
@@ -27,10 +23,7 @@ class Logic:
         
         return np.mean(valid_points)
 
-
     def detState(self, ranges) -> str:
-        """Determines the state based on lidar data"""
-
         front_dist = self.getFrontDist(ranges)
 
         if front_dist > self.THRESH_STRAIGHT:
