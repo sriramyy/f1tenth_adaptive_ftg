@@ -41,6 +41,8 @@ class AdaptiveFollowGap(Node):
         
         # determine the state with logic
         current_state = self.logic.detState(ranges)
+        # print ranges for debugging
+        print(f"[DEBUG] {ranges}")
         
         # update params based on the state
         self.params.setState(current_state)
